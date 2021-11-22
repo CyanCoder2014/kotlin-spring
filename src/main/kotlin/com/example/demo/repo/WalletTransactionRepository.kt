@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
-import java.time.LocalDateTime
 import java.util.*
 
 
@@ -28,4 +27,12 @@ interface WalletTransactionRepository: JpaRepository<WalletTransaction, Long> {
         @Param("startDate") startDate: Date?,
         @Param("endDate") endDate: Date?
     ): List<Map<String,Object>>
+
+    @Query(
+        value = "select sum(wt.amount) as sum from wallet_transactions  wt " +
+                "where wt.datetime <= :endDate"
+    )
+    fun getWalletAmount(
+        @Param("endDate") endDate: Date?
+    ): Double
 }
