@@ -15,14 +15,14 @@ interface WalletTransactionRepository: JpaRepository<WalletTransaction, Long> {
 
     @Modifying
     @Query("select a from wallet_transactions a " +
-            "where a.datetime >= :startDate and a.datetime <= :endDate")
+            "where a.datetime > :startDate and a.datetime <= :endDate")
     fun getTransactionsHistory(@Param("startDate") startDate: Date,
                                @Param("endDate") endDate: Date): Collection<WalletTransaction>
 
 
     @Query(
-        value = "SELECT sum(ac.amount) as sum, function('date_format', max(ac.datetime), '%Y, %m, %d %h') as date FROM wallet_transactions  ac " +
-                "WHERE ac.datetime BETWEEN :startDate AND :endDate GROUP BY function('date_format', ac.datetime, '%Y, %m, %d %h')"
+        value = "select sum(wt.amount) as sum, function('date_format', max(wt.datetime), '%Y-%m-%d %h:00') as date from wallet_transactions  wt " +
+                "where wt.datetime > :startDate and wt.datetime <= :endDate group by function('date_format', wt.datetime, '%Y-%m-%d %h:00')"
     )
     fun getTransactionsHistorySum(
         @Param("startDate") startDate: Date?,

@@ -1,5 +1,6 @@
 package com.example.demo.repo
 
+import com.example.demo.config.Constants
 import com.example.demo.entity.WalletTransaction
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.*
@@ -16,7 +17,7 @@ import java.util.*
 internal class WalletTransactionRepositoryTest (@Autowired private val walletTransactionRepository: WalletTransactionRepository){
 
 
-    fun String.toDate(dateFormat: String = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timeZone: TimeZone = TimeZone.getTimeZone("GMT")): Date {
+    fun String.toDate(dateFormat: String = Constants.DATE_FORMAT_VAL, timeZone: TimeZone = TimeZone.getTimeZone("GMT")): Date {
         val parser = SimpleDateFormat(dateFormat, Locale.getDefault())
         parser.timeZone = timeZone
         return parser.parse(this)
@@ -25,16 +26,16 @@ internal class WalletTransactionRepositoryTest (@Autowired private val walletTra
 
     @Test
     fun `When getTransactionsHistory then return collection of WalletTransaction`() {
-        val walletTransaction = WalletTransaction(1000, "qwe0qwe0q09we",
-            "seller_name","2021-11-19T01:00:00.00+08:00".toDate("yyyy-MM-dd'T'HH:mm:ss.SSSXXX",  TimeZone.getTimeZone("GMT")),222.9)
+        val walletTransaction = WalletTransaction(100, "qwe0qwe0q09we",
+            "seller_name","2021-11-19T01:00:00.00+08:00".toDate(Constants.DATE_FORMAT_VAL,  TimeZone.getTimeZone("GMT")),222.9)
 
         assertThat(walletTransaction).isNotNull
 
         walletTransactionRepository.save(walletTransaction)
-        assertNotNull(walletTransactionRepository.findById(1000))
+        assertNotNull(walletTransactionRepository.findById(100))
 
-        val walletTransactions = walletTransactionRepository.getTransactionsHistory("2021-11-19T01:00:00.00+08:00".toDate("yyyy-MM-dd'T'HH:mm:ss.SSSXXX",  TimeZone.getTimeZone("GMT")),
-            "2021-11-19T01:00:00.00+08:00".toDate("yyyy-MM-dd'T'HH:mm:ss.SSSXXX",  TimeZone.getTimeZone("GMT")))
+        val walletTransactions = walletTransactionRepository.getTransactionsHistory("2000-11-19T01:00:00.00+08:00".toDate(Constants.DATE_FORMAT_VAL,  TimeZone.getTimeZone("GMT")),
+            "2050-11-19T01:00:00.00+08:00".toDate(Constants.DATE_FORMAT_VAL,  TimeZone.getTimeZone("GMT")))
 
         assertThat(walletTransactions.size).isGreaterThanOrEqualTo(1)
 

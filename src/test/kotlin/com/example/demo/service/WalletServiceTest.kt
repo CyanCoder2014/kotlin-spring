@@ -1,5 +1,6 @@
 package com.example.demo.service
 
+import com.example.demo.config.Constants
 import com.example.demo.entity.WalletTransaction
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.*
@@ -25,7 +26,7 @@ internal class WalletServiceTest(@Autowired private val walletService: WalletSer
     @BeforeEach
     fun `Add transactions`() {
 
-        val walletTransaction = WalletTransaction(1000, "qwe0qwe0q09we",
+        val walletTransaction = WalletTransaction(2000, "qwe0qwe0q09we",
             "seller_name","2021-11-19T01:00:00.00+08:00".toDate("yyyy-MM-dd'T'HH:mm:ss.SSSXXX",  TimeZone.getTimeZone("GMT")),222.9)
 
         assertThat(walletTransaction).isNotNull
@@ -38,8 +39,8 @@ internal class WalletServiceTest(@Autowired private val walletService: WalletSer
     @Test
     fun `history of wallet transactions return a list`() {
 
-       val walletTransactions = walletService.getHistory("2021-11-19T01:00:00.00+08:00".toDate("yyyy-MM-dd'T'HH:mm:ss.SSSXXX",  TimeZone.getTimeZone("GMT")),
-            "2021-11-19T01:00:00.00+08:00".toDate("yyyy-MM-dd'T'HH:mm:ss.SSSXXX",  TimeZone.getTimeZone("GMT")))
+       val walletTransactions = walletService.getHistory("2000-11-19T01:00:00.00+08:00".toDate(Constants.DATE_FORMAT_VAL,  TimeZone.getTimeZone("GMT")),
+            "2050-11-19T01:00:00.00+08:00".toDate(Constants.DATE_FORMAT_VAL,  TimeZone.getTimeZone("GMT")))
 
         assertThat(walletTransactions.size).isGreaterThanOrEqualTo(1)
 
@@ -50,8 +51,8 @@ internal class WalletServiceTest(@Autowired private val walletService: WalletSer
     fun `Sum of wallet transactions return a list that group_by hour`() {
 
 
-        val walletTransactions = walletService.getHistorySum("2021-11-19T01:00:00.00+08:00".toDate("yyyy-MM-dd'T'HH:mm:ss.SSSXXX",  TimeZone.getTimeZone("GMT")),
-            "2021-11-19T01:00:00.00+08:00".toDate("yyyy-MM-dd'T'HH:mm:ss.SSSXXX",  TimeZone.getTimeZone("GMT")))
+        val walletTransactions = walletService.getHistorySum("2000-11-19T01:00:00.00+08:00".toDate(Constants.DATE_FORMAT_VAL,  TimeZone.getTimeZone("GMT")),
+            "2050-11-19T01:00:00.00+08:00".toDate(Constants.DATE_FORMAT_VAL,  TimeZone.getTimeZone("GMT")))
 
         assertThat(walletTransactions.size).isGreaterThanOrEqualTo(1)
 
