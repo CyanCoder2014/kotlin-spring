@@ -1,16 +1,31 @@
 package com.example.demo.service
 
 import com.example.demo.entity.WalletTransaction
+import com.example.demo.repo.WalletHistoryModel
 import com.example.demo.repo.WalletTransactionRepository
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 import java.util.*
 
 @Service
 @Transactional
 class WalletService(private val walletTransactionRepo: WalletTransactionRepository) {
+
+
+    fun getHistoryPerHour(startDateTime: Date, endDateTime: Date):Collection<WalletHistoryModel>{
+
+        var amountBeforeStart = walletTransactionRepo.getWalletAmount(startDateTime)
+        var walletTransactionsPerHour = walletTransactionRepo.getTransactionsHistorySum(startDateTime,endDateTime)
+
+        var walletAmountHourly : MutableList <WalletHistoryModel> = arrayListOf()
+
+        var sumAmount = amountBeforeStart
+        walletTransactionsPerHour.forEach { i ->
+            sumAmount = sumAmount + i.get("sum").toString()?.toDouble()
+            walletAmountHourly.add(WalletHistoryModel( i.get("date").toString(), sumAmount))
+        }
+        return walletAmountHourly
+    }
 
 
     fun getHistory(startDateTime: Date, endDateTime: Date):Collection<WalletTransaction>{
@@ -30,8 +45,9 @@ class WalletService(private val walletTransactionRepo: WalletTransactionReposito
         return walletTransactionRepo.findById(transactionId)
     }
 
-    fun addTransaction(transaction: WalletTransaction):WalletTransaction{
+    fun addTransaction(transaction: WalletTransaction): WalletTransaction {
         return walletTransactionRepo.save(transaction)
     }
+
 
 }
