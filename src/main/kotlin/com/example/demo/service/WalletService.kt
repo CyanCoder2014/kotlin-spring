@@ -14,7 +14,11 @@ class WalletService(private val walletTransactionRepo: WalletTransactionReposito
 
     fun getHistoryPerHour(startDateTime: Date, endDateTime: Date):Collection<WalletHistoryModel>{
 
-        var amountBeforeStart = walletTransactionRepo.getWalletAmount(startDateTime)
+        var amountBeforeStartQuery:Double? = walletTransactionRepo.getWalletAmount(startDateTime)
+        var amountBeforeStart = 0.00
+        if(amountBeforeStartQuery != null)
+          amountBeforeStart = amountBeforeStartQuery
+
         var walletTransactionsPerHour = walletTransactionRepo.getTransactionsHistorySum(startDateTime,endDateTime)
 
         var walletAmountHourly : MutableList <WalletHistoryModel> = arrayListOf()
