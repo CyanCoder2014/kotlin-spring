@@ -34,5 +34,5 @@ interface WalletTransactionRepository: JpaRepository<WalletTransaction, Long> {
     )
     fun getWalletAmount(
         @Param("endDate") endDate: Date?
-    ): Double
+    ): Double?
 }
